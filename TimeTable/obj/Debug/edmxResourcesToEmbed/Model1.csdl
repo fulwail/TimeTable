@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchoolModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Class">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Number" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Timetable" Relationship="Self.FK__Timetable__Class__2E1BDC42" FromRole="Class" ToRole="Timetable" />
+  </EntityType>
+  <EntityType Name="Classroom">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Timetable" Relationship="Self.FK__Timetable__Class__300424B4" FromRole="Classroom" ToRole="Timetable" />
+  </EntityType>
+  <EntityType Name="LessonTime">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="LessonNumber" Type="Int32" Nullable="false" />
+    <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+    <NavigationProperty Name="Timetable" Relationship="Self.FK__Timetable__Lesso__30F848ED" FromRole="LessonTime" ToRole="Timetable" />
+  </EntityType>
+  <EntityType Name="SchoolSubject">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TeacherId" Type="Guid" />
+    <NavigationProperty Name="Teacher" Relationship="Self.FK__SchoolSub__Teach__31EC6D26" FromRole="SchoolSubject" ToRole="Teacher" />
+    <NavigationProperty Name="Timetable" Relationship="Self.FK__Timetable__Schoo__2F10007B" FromRole="SchoolSubject" ToRole="Timetable" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Teacher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="SurName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Patronymic" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="SchoolSubject" Relationship="Self.FK__SchoolSub__Teach__31EC6D26" FromRole="Teacher" ToRole="SchoolSubject" />
+  </EntityType>
+  <EntityType Name="Timetable">
+    <Key>
+      <PropertyRef Name="LessonId" />
+    </Key>
+    <Property Name="LessonId" Type="Guid" Nullable="false" />
+    <Property Name="DayOfWeek" Type="Byte" Nullable="false" />
+    <Property Name="ClassId" Type="Guid" Nullable="false" />
+    <Property Name="LessonTimeId" Type="Guid" Nullable="false" />
+    <Property Name="SchoolSubjectId" Type="Guid" Nullable="false" />
+    <Property Name="ClassroomId" Type="Guid" />
+    <NavigationProperty Name="Class" Relationship="Self.FK__Timetable__Class__2E1BDC42" FromRole="Timetable" ToRole="Class" />
+    <NavigationProperty Name="Classroom" Relationship="Self.FK__Timetable__Class__300424B4" FromRole="Timetable" ToRole="Classroom" />
+    <NavigationProperty Name="LessonTime" Relationship="Self.FK__Timetable__Lesso__30F848ED" FromRole="Timetable" ToRole="LessonTime" />
+    <NavigationProperty Name="SchoolSubject" Relationship="Self.FK__Timetable__Schoo__2F10007B" FromRole="Timetable" ToRole="SchoolSubject" />
+  </EntityType>
+  <Association Name="FK__Timetable__Class__2E1BDC42">
+    <End Role="Class" Type="Self.Class" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Class">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="ClassId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Class__300424B4">
+    <End Role="Classroom" Type="Self.Classroom" Multiplicity="0..1" />
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Classroom">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="ClassroomId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Lesso__30F848ED">
+    <End Role="LessonTime" Type="Self.LessonTime" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LessonTime">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="LessonTimeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SchoolSub__Teach__31EC6D26">
+    <End Role="Teacher" Type="Self.Teacher" Multiplicity="0..1" />
+    <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Teacher">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SchoolSubject">
+        <PropertyRef Name="TeacherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Schoo__2F10007B">
+    <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SchoolSubject">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="SchoolSubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SchoolEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Class" EntityType="Self.Class" />
+    <EntitySet Name="Classroom" EntityType="Self.Classroom" />
+    <EntitySet Name="LessonTime" EntityType="Self.LessonTime" />
+    <EntitySet Name="SchoolSubject" EntityType="Self.SchoolSubject" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Teacher" EntityType="Self.Teacher" />
+    <EntitySet Name="Timetable" EntityType="Self.Timetable" />
+    <AssociationSet Name="FK__Timetable__Class__2E1BDC42" Association="Self.FK__Timetable__Class__2E1BDC42">
+      <End Role="Class" EntitySet="Class" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Class__300424B4" Association="Self.FK__Timetable__Class__300424B4">
+      <End Role="Classroom" EntitySet="Classroom" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Lesso__30F848ED" Association="Self.FK__Timetable__Lesso__30F848ED">
+      <End Role="LessonTime" EntitySet="LessonTime" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SchoolSub__Teach__31EC6D26" Association="Self.FK__SchoolSub__Teach__31EC6D26">
+      <End Role="Teacher" EntitySet="Teacher" />
+      <End Role="SchoolSubject" EntitySet="SchoolSubject" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Schoo__2F10007B" Association="Self.FK__Timetable__Schoo__2F10007B">
+      <End Role="SchoolSubject" EntitySet="SchoolSubject" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,68 @@
+﻿@model TimeTable.ViewModel.TeacherListViewModel
+@{
+    ViewBag.Title = "Учителя";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong> Список учителей</strong></span>
+                </div>
+     
+                <div style="padding-top:25px">
+                    <label>Добавить учителя:</label>  
+                    <button   onclick="location.href='@Url.Action("Create", "Teacher")'"
+                        style=" display: inline-block;" class="btn btn-link btn-xs">
+                        <span class="glyphicon glyphicon-check btn-lg">
+                        </span>  
+                    </button>
+                </div>
+                <div class="panel-body form-horizontal">
+                    <div class="ra-section k-grid k-widget" id="orders" data-role="grid">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Фамилия</th>
+                                    <th style="text-align: center">Имя</th>
+                                    <th style="text-align: center">Отчество</th>
+                                    <th style="text-align: center">Предметы</th>
+                                    <th style="text-align: center">Действия</th>
+                                </tr>
+                            </thead>
+
+
+                            @foreach (var Teacher in @Model.TeachersList)
+                            {
+
+
+                                <tr>
+                                    <td style="text-align: center"><a href='@Url.Action("Edit", "Teacher",  new { id = @Teacher.Id })'> @Teacher.SurName</a></td>
+                                    <td style="text-align: center"> @Teacher.Name</td>
+                                    <td style="text-align: center"> @Teacher.Patronymic</td>
+                                    <td style="text-align: center"> @Teacher.SchoolSubjects</td>
+                                    <td>
+                                        @using (Html.BeginForm("DeleteTeacher", "Teacher", FormMethod.Post))
+                                        {
+                                            <button type="submit" class="btn btn-link btn-xs center-block" data-toggle='modal'><span class="glyphicon glyphicon-remove btn-lg" style="padding:0"> </span> </button>
+                                            <input type="hidden" name="Id" value="@Teacher.Id" />
+                                        }
+                                     </td>
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $("[type='submit']").on('click', function () {
+            $("#Id").val($(this).data('Id'));
+        }
+
+
+    </script>
+</Content>

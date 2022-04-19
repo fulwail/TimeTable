@@ -1,0 +1,64 @@
+﻿@model TimeTable.ViewModel.EditSchoolSubjectViewModel
+@{
+    ViewBag.Title = "Редактирование Предмета";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong> Форма редактирования данных о предмете</strong></span>
+                </div>
+               
+            <div class="panel-body form-horizontal">
+
+                <div style="padding-top:25px">
+                    <label>Редактировать предмет:</label>
+                    <p></p>
+                    @using (Html.BeginForm("CreateOrUpdate", "SchoolSubject", FormMethod.Post))
+                    {
+
+                        <input style="height:33px" class="col-md-2" title="Наименование предмета" name="Name"
+                               id="Name" type="text" value="@Model.SchoolSubject.Name"
+                               data-val="true" data-val-required="Поле Наименование предмета обязательно для заполнения." />
+
+
+                        <select disabled="@(Model.Teachers.Count == 0)" title="Список учителей" style="display: inline-block;margin-left:20px" class="form-control col-md-2"
+                                id="selectSchoolSubject" name="teacherId">
+                            @if (Model.Teachers.Count != 0)
+                            {
+                                <option value=""></option>
+                                foreach (var teachers in Model.Teachers)
+                                {
+                                    if (Model.SchoolSubject.TeacherId != null && teachers.Id == Model.SchoolSubject.TeacherId.Value)
+                                    {
+                                        <option value="@teachers.Id" selected>@teachers.SurName @teachers.Name @teachers.Patronymic</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@teachers.Id">@teachers.SurName @teachers.Name @teachers.Patronymic</option>
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                <option>Учителя отсутсвуют </option>
+                            }
+                        </select>
+
+                        <button style="display: inline-block; margin-top: -1%; position: inherit;" id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                            <span class="glyphicon glyphicon-check btn-lg">
+                            </span>
+                        </button>
+
+                        <span class="field-validation-valid" style="color:red;" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                        <input type="hidden" name="Id" value="@Model.SchoolSubject.Id" />
+                    }
+
+                </div>
+          
+       
+
+    </div>
+</Content>

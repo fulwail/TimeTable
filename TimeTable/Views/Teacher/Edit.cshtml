@@ -1,0 +1,101 @@
+﻿@model TimeTable.ViewModel.EditTeacherViewModel
+@{
+    ViewBag.Title = "Редактирование учителя";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong> Форма редактирования данных об учителе</strong></span>
+                </div>
+                @using (Html.BeginForm("CreateOrUpdateTeacher", "Teacher", FormMethod.Post))
+                {
+            <div class="panel-body form-horizontal">
+                <label class="col-md-1"> Фамилия:</label>
+                <input class="col-md-2" name="Teacher.Surname" id="Surname" type="text" data-val="true" data-val-required="*" value="@Model.Teacher.SurName" />
+                <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Teacher.Surname" data-valmsg-replace="true"></span>
+
+                <label class="col-md-1"> Имя:</label>
+                <input class="col-md-2" name="Teacher.Name" id="Name" type="text" data-val="true" data-val-required="*"  value="@Model.Teacher.Name"/>
+                <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Teacher.Name" data-valmsg-replace="true"></span>
+
+                <label class="col-md-1"> Отчество:</label>
+                <input class="col-md-2" name="Teacher.Patronymic" id="Patronymic" type="text"  data-val="true" data-val-required="*" value="@Model.Teacher.Patronymic"/>
+                <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Teacher.Patronymic" data-valmsg-replace="true"></span>
+
+             
+
+
+                <input style="margin-left: 40px;" class="someCss" id="SaveButton" type="submit" value="Сохранить" />
+
+                @Html.HiddenFor(x => x.Teacher.Id)
+
+            </div>
+
+
+
+                }
+
+
+            <div>
+                <label>Добавить предмет:</label>
+                @using (Html.BeginForm("AddTeacherOnSchoolSubject", "Teacher", FormMethod.Post))
+                {
+            <select disabled="@(Model.SchoolSubject.Count==0)"  style="display: inline-block;" class="form-control" id="selectSchoolSubject" name="schoolSubjectId">
+                @if (Model.SchoolSubject.Count != 0)
+                {
+                     foreach (var schoolSubject in Model.SchoolSubject)
+                      {
+
+                          <option value="@schoolSubject.Id">@schoolSubject.Name </option>
+                      }
+                }
+                else
+                {
+                <option>Нет свободных предметов </option>
+                }
+            </select>
+            <button style=" display: inline-block; visibility:@(Model.SchoolSubject.Count==0? "hidden":"visible")" class="btn btn-link btn-xs">
+                <span class="glyphicon glyphicon-check btn-lg">
+                </span>
+            </button>
+                    <input type="hidden" name="TeacherId" value="@Model.Teacher.Id">    
+                }
+            </div>
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">
+                                Список предметов:
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    @foreach (var SchoolSubject in Model.Teacher.SchoolSubject)
+                    {
+                        <tr>
+                            <td name="SchoolSubject" style="text-align: left">
+                                @SchoolSubject.Name
+                                <button class="btn btn-link btn-xs" data-toggle='modal'>
+                                    <span class="glyphicon glyphicon-remove btn-lg" style="padding:0"
+                                          onclick="location.href='@Url.Action("RemoveTeacherOnSchoolSubject", "Teacher", new {  id=Model.Teacher.Id, schoolSubjectId = SchoolSubject.Id})'">
+                                    </span>
+                                </button>
+                                <input type="hidden" name="Id" value="@SchoolSubject.Id" />
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+</Content>

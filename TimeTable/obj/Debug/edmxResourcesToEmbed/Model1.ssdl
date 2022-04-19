@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище SchoolModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Class">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Number" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Classroom">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LessonTime">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LessonNumber" Type="int" Nullable="false" />
+    <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+    <Property Name="EndTime" Type="time" Precision="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SchoolSubject">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="TeacherId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Teacher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="SurName" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Patronymic" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Timetable">
+    <Key>
+      <PropertyRef Name="LessonId" />
+    </Key>
+    <Property Name="LessonId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DayOfWeek" Type="tinyint" Nullable="false" />
+    <Property Name="ClassId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LessonTimeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="SchoolSubjectId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ClassroomId" Type="uniqueidentifier" />
+  </EntityType>
+  <Association Name="FK__SchoolSub__Teach__31EC6D26">
+    <End Role="Teacher" Type="Self.Teacher" Multiplicity="0..1" />
+    <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Teacher">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SchoolSubject">
+        <PropertyRef Name="TeacherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Class__2E1BDC42">
+    <End Role="Class" Type="Self.Class" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Class">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="ClassId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Class__300424B4">
+    <End Role="Classroom" Type="Self.Classroom" Multiplicity="0..1" />
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Classroom">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="ClassroomId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Lesso__30F848ED">
+    <End Role="LessonTime" Type="Self.LessonTime" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LessonTime">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="LessonTimeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Timetable__Schoo__2F10007B">
+    <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SchoolSubject">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Timetable">
+        <PropertyRef Name="SchoolSubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище SchoolModelContainer">
+    <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Classroom" EntityType="Self.Classroom" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LessonTime" EntityType="Self.LessonTime" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SchoolSubject" EntityType="Self.SchoolSubject" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Timetable" EntityType="Self.Timetable" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__SchoolSub__Teach__31EC6D26" Association="Self.FK__SchoolSub__Teach__31EC6D26">
+      <End Role="Teacher" EntitySet="Teacher" />
+      <End Role="SchoolSubject" EntitySet="SchoolSubject" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Class__2E1BDC42" Association="Self.FK__Timetable__Class__2E1BDC42">
+      <End Role="Class" EntitySet="Class" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Class__300424B4" Association="Self.FK__Timetable__Class__300424B4">
+      <End Role="Classroom" EntitySet="Classroom" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Lesso__30F848ED" Association="Self.FK__Timetable__Lesso__30F848ED">
+      <End Role="LessonTime" EntitySet="LessonTime" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Timetable__Schoo__2F10007B" Association="Self.FK__Timetable__Schoo__2F10007B">
+      <End Role="SchoolSubject" EntitySet="SchoolSubject" />
+      <End Role="Timetable" EntitySet="Timetable" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

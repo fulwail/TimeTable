@@ -1,0 +1,40 @@
+﻿@model TimeTable.ViewModel.TeacherViewModel
+@{
+    ViewBag.Title = "Создания учителя";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong> Форма создания учителя</strong></span>
+                </div>
+                @using (Html.BeginForm("CreateOrUpdateTeacher", "Teacher", FormMethod.Post))
+                {
+            <div class="panel-body form-horizontal">
+
+               
+                    <label class="col-md-1"> Фамилия:</label>
+                    <input class="col-md-2"   name="Surname" id="Surname" type="text" value="" data-val="true" data-val-required="*" />
+                    <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Surname" data-valmsg-replace="true"></span>
+              
+                    <label class="col-md-1"> Имя:</label>
+                    <input class="col-md-2"  name="Name" id="Name" type="text" value="" data-val="true" data-val-required="*" />
+
+                    <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+               
+                    <label class="col-md-1"> Отчество:</label>
+                    <input class="col-md-2" name="Patronymic" id="Patronymic" type="text" value="" data-val="true" data-val-required="*" />
+                    <span class="field-validation-valid col-md-1" style="color: red; width: 5px" data-valmsg-for="Patronymic" data-valmsg-replace="true"></span>
+
+
+                <input style="margin-left: 40px;" class="someCss" id="SaveButton" type="submit" value="Сохранить" />
+
+                @Html.HiddenFor(x => x.Id)
+                <p></p>
+
+            </div>
+                }          
+        </div>
+    </div>
+</Content>

@@ -1,0 +1,138 @@
+﻿@model TimeTable.ViewModel.LessonListViewModel
+@{
+    ViewBag.Title = "Школьное расписание";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong> Школьное расписание</strong></span>
+                </div>
+                <div></div>
+                <div class="panel-body form-horizontal">
+                    <div class="ra-section k-grid k-widget" id="orders" data-role="grid">
+                        <label>Добавить или изменить расписание:</label>
+                        <p></p>
+                        @using (Html.BeginForm("CreateOrUpdate", "Timetable", FormMethod.Post))
+                        {
+
+                            <select disabled="@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0)" style="display: inline-block;margin-left:20px; width:70px" class="form-control col-md-2" id="select;" name="ClassId">
+
+                                @if (Model.Class.Count != 0)
+                                {
+                                    foreach (var Class in Model.Class)
+                                    {
+
+                                        <option value="@Class.Id">@Class.Number@Class.Name</option>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <option>-</option>
+                                }
+                            </select>
+
+                            <select disabled="@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0)" style="display: inline-block; margin-left: 20px; width: 135px" class="form-control col-md-2" id="dayOfWeek" name="dayOfWeek">
+                                @foreach (var dayOfWeek in Model.DayOfWeek)
+                                {
+                                    <option value="@dayOfWeek.Enum">@dayOfWeek.Description</option>
+
+                                }
+                            </select>
+
+                            <select disabled="@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0)" style="display: inline-block; margin-left: 20px; width: 90px" class="form-control col-md-2" id="dayOfWeek" name="LessonTimeId">
+                                @foreach (var lessonTime in Model.LessonTimes)
+                                {
+                                    <option value="@lessonTime.Id">@lessonTime.LessonNumber урок</option>
+
+                                }
+                            </select>
+
+                            <select disabled="@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0)" style="display: inline-block;margin-left:20px;" class="form-control col-md-2" id="dayOfWeek" name="SchoolSubjectId">
+                                @if (Model.SchoolSubjects.Count != 0)
+                                {
+                                    foreach (var schoolSubjects in Model.SchoolSubjects)
+                                    {
+                                        <option value="@schoolSubjects.Id">@schoolSubjects.Name</option>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <option>Подходящие предметы остуствуют</option>
+                                }
+                            </select>
+                            <select disabled="@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0)" style="display: inline-block;margin-left:20px;" class="form-control col-md-2" id="dayOfWeek" name="ClassroomId">
+                                @if (Model.Classrooms.Count != 0)
+                                {
+                                    foreach (var classrooms in Model.Classrooms)
+                                    {
+
+                                        <option value="@classrooms.Id">@classrooms.Name</option>
+
+
+                                    }
+                                }
+                                else
+                                {
+                                    <option>Аудитории отсутствуют</option>
+                                }
+                            </select>
+
+                            <button style="display: inline-block; margin-top: -1%; position: inherit; visibility:@(Model.Class.Count == 0||Model.SchoolSubjects.Count==0||Model.Classrooms.Count==0? "hidden":"visible")" id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                                <span class="glyphicon glyphicon-check btn-lg">
+                                </span>
+                            </button>
+
+                        }
+                        @if (Model.ErrorMessage != null)
+                        {
+                            <label style="color:red;">@Model.ErrorMessage</label>
+                        }
+                        <p></p>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">День недели</th>
+                                    <th style="text-align: center">Класс</th>
+                                    <th style="text-align: center">Номер урока</th>
+                                    <th style="text-align: center">Время начала</th>
+                                    <th style="text-align: center"> Время окончания</th>
+                                    <th style="text-align: center">Предмет</th>
+                                    <th style="text-align: center">Учитель</th>
+                                    <th style="text-align: center">Аудитория</th>
+                                    <th style="text-align: center">Действие</th>
+                                </tr>
+                            </thead>
+
+
+                            @foreach (var Lesson in Model.Lessons)
+                            {
+                                <tr>
+                                    <td style="text-align: center"> @Lesson.DayOfWeek</td>
+                                    <td style="text-align: center"> @Lesson.ClassName</td>
+                                    <td style="text-align: center"> @Lesson.LessonNumber</td>
+                                    <td style="text-align: center"> @Lesson.StartTime</td>
+                                    <td style="text-align: center"> @Lesson.EndTime</td>
+                                    <td style="text-align: center"> @Lesson.SchoolSubjectName</td>
+                                    <td style="text-align: center"> @Lesson.TeacherName</td>
+                                    <td style="text-align: center"> @Lesson.ClassroomName</td>
+                                    <td>
+                                        @using (Html.BeginForm("DeleteLesson", "Timetable", FormMethod.Post))
+                                        {
+                                            <button type="submit" class="btn btn-link btn-xs center-block" data-toggle='modal'><span class="glyphicon glyphicon-remove btn-lg" style="padding:0"> </span> </button>
+                                            <input type="hidden" name="Id" value="@Lesson.LessonId" />
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Content>

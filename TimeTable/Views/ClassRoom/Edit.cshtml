@@ -1,0 +1,35 @@
+﻿@model TimeTable.Models.Classroom
+@{
+    ViewBag.Title = "Редактирование Аудитории";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong>Редактирование Аудитории</strong></span>
+                </div>
+                <p></p>
+                <label>Переименовать аудиторию:</label>
+                <p></p>
+                @using (Html.BeginForm("CreateOrUpdateClassroom", "ClassRoom", FormMethod.Post))
+                {
+
+                    <input style="height:33px" class="col-md-2" title="Наименование аудитории" name="Name"
+                           id="Name" type="text" value="@Model.Name" data-val="true" data-val-required="Поле Наименование аудитории обязательно для заполнения." />
+
+                           <input type="hidden" value="@Model.Id" name="Id">
+                    <button style="display: inline-block; margin-top: -1%; position: inherit; " id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                        <span class="glyphicon glyphicon-check btn-lg">
+                        </span>
+                    </button>
+
+                    <span class="field-validation-valid" style="color:red;" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</Content>

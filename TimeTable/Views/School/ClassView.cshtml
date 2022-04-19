@@ -1,0 +1,74 @@
+﻿@model TimeTable.ViewModel.ClassViewModel
+@{
+    ViewBag.Title = "Классы";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+    <div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong>Классы</strong></span>
+                </div>
+
+                <div style="padding-top:25px">
+                    <label>Добавить класс:</label>
+                    <p></p>
+                    @using (Html.BeginForm("CreateClass", "Class", FormMethod.Post))
+                    {
+                        <select style="display: inline-block;margin-right:20px; width: 60px" class="form-control col-md-2" id="selectСlass" name="Number">
+                            @for (int i = 1; i <= 11; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+
+                        </select>
+
+                        <button style="display: inline-block; margin-top: -1%; position: inherit;" id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                            <span class="glyphicon glyphicon-check btn-lg">
+                            </span>
+                        </button>
+
+                        <p></p>
+                        if (Model.Message != null)
+                        {
+                            <label>@Model.Message</label>
+                        }
+
+                    }
+
+                </div>
+                <div class="panel-body form-horizontal">
+                    <div class="ra-section k-grid k-widget" id="orders" data-role="grid">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Класс</th>
+                                    <th style="text-align: center">Действие</th>
+                                </tr>
+                            </thead>
+
+
+                            @foreach (var Class in @Model.ClassList)
+                            {
+                                <tr>
+                                    <td style="text-align: center"> @Class.Number@Class.Name</td>
+                                    <td>
+                                        @using (Html.BeginForm("DeleteClass", "Class", FormMethod.Post))
+                                        {
+                                            <button type="submit" class="btn btn-link btn-xs center-block" data-toggle='modal'><span class="glyphicon glyphicon-remove btn-lg" style="padding:0"> </span> </button>
+                                            <input type="hidden" name="Id" value="@Class.Id" />
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                </div> 
+            </div>
+        </div>
+
+    </div>
+
+</Content>

@@ -1,0 +1,129 @@
+﻿@model TimeTable.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "Отчеты";
+}
+<Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+<div class="row">
+        <div class="col-md-12 main" data-bind="with: TableWidgetViewModel" id="secondRow">
+            <div class="panel panel-default col-md-12">
+                <div class="panel-heading">
+                    <span class="panel-title"><strong>Отчеты</strong></span>
+                </div>
+                <div style="padding-top:25px">
+                    @using (Html.BeginForm("ReportView", "School", FormMethod.Post))
+                    {
+
+
+                        <label>Выборка самого занятого учителя</label>
+                        <p></p>
+                        <label> Самый занятый учитель: </label>
+                        if (Model.BusyTeacher != null)
+                        {
+                            <span> @Model.BusyTeacher.SurName   @Model.BusyTeacher.Name  @Model.BusyTeacher.Patronymic. Количество обучаемых предметов: @Model.BusyTeacher.CountSchoolSubject</span>
+                        }
+                        else
+                        {
+                            <label style="color:red"> Учителя c предметами отсуствуют</label>
+                        }
+                        <p></p>
+
+                        <label>Выборка наименее используемой аудитории по дням недели:</label>
+                        <button style="display: inline-block; margin-top: -1%; position: inherit;" id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                            <span class="glyphicon glyphicon-check btn-lg">
+                            </span>
+                        </button>
+                        <br />
+
+
+
+                        foreach (var dayOfWeek in Model.DayOfWeek)
+                        {
+                            <input value="@dayOfWeek.Enum" type="checkbox" id="dayOfWeek" name="dayOfWeeks" @(Model.ActiveDayOfWeeks != null && Model.ActiveDayOfWeeks.Any(x => x == dayOfWeek.Enum) ? "checked" : "")>
+                            <span for="horns">@dayOfWeek.Description</span>
+                        }
+                        <p></p>
+                        <label> Наименее используемая аудитория:</label>
+                        if (Model.FreeClassRoom != null)
+                        {
+
+                            if (@Model.FreeClassRoom.Name != null)
+                            {
+                                <span> @Model.FreeClassRoom.Name. Количество обучаемых предметов: @Model.FreeClassRoom.LessonsCount</span>
+                            }
+                            else
+                            {
+                                <label style="color:red"> Аудитории на выбранных днях недели не используются</label>
+                            }
+                        }
+                        <p></p>
+                        <label>Статистика классов</label>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Класс</th>
+                                    <th style="text-align: center">Количество уроков</th>
+                                    <th style="text-align: center">Количество учителей</th>
+                                </tr>
+                            </thead>
+
+
+                            @foreach (var ClassInfoReport in Model.ClassInfoReport)
+                            {
+                                <tr>
+                                    <td style="text-align: center"> @ClassInfoReport.Number@ClassInfoReport.Name</td>
+                                    <td style="text-align: center"> @ClassInfoReport.LessonsCount</td>
+                                    <td style="text-align: center"> @ClassInfoReport.TeacherCount</td>
+                                </tr>
+                            }
+
+                        </table>
+                        <label>Статистика по параллели</label>
+                        <select disabled="@(Model.ClassParallels.Count==0)" style="display: inline-block; margin-right: 20px; width: 135px" class="form-control col-md-2" id="сlassParallels" name="classParallelNumber">
+                            @foreach (var сlassParallels in Model.ClassParallels)
+                            {
+                                <option value="@сlassParallels">@сlassParallels</option>
+
+                            }
+                        </select>
+                        <button style="display: inline-block; margin-top: -1%; position: inherit;" id="Savebtn" name="Savebtn" class="btn btn-link btn-xs">
+                            <span class="glyphicon glyphicon-check btn-lg">
+                            </span>
+                        </button>
+                        <p></p>
+                        if (Model.ParallelInfoReport != null)
+                        {
+                            if (Model.ParallelInfoReport.Count() != 0)
+                            {
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center">Класс</th>
+                                            <th style="text-align: center"> Предметы</th>
+                                            <th style="text-align: center">Учителя</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var parallelInfoReport in Model.ParallelInfoReport)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center"> @parallelInfoReport.Number@parallelInfoReport.Name</td>
+                                            <td style="text-align: center"> @parallelInfoReport.SchoolSubjects</td>
+                                            <td style="text-align: center"> @parallelInfoReport.Teachers</td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+                            else
+                            {
+                                <label style="color:red"> Статистика по данной параллелли не найдена</label>
+                            }
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+</div>
+               
+ 
+</Content>
